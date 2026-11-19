@@ -21,3 +21,8 @@ Run the tests:
 ```sh
 sbt test
 ```
+
+## Development Cycle
+
+1. Started with branch feature/board
+2. Finished TDD and concerns related to board so I'm merging back to develop
