@@ -12,3 +12,5 @@ project/project/
 # Scala IDE tooling
 .bsp/
 .metals/
+.bloop/
+/project/metals.sbt
