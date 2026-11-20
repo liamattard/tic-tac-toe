@@ -176,6 +176,12 @@ also checks formatting, runs the tests, uploads the coverage report and checks
 the Docker image with a scripted match.
 
 
+The report below was generated on 20 November 2026: **76.82% statement coverage**
+and **77.50% branch coverage**. This is a snapshot; the latest report is available
+in GitHub Actions.
+
+![Scoverage report showing statement and branch coverage](planning/images/coverage.png)
+
 ## Optional browser demo
 
 [Play the browser version](https://tic-tac-toe-production-5d713f35.up.railway.app/).
