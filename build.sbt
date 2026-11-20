@@ -2,7 +2,12 @@ name         := "tictactoe"
 version      := "1.0.0"
 scalaVersion := "2.13.18"
 
+scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
+
 libraryDependencies += "org.scalameta" %% "munit" % "1.2.1" % Test
 
-Compile / run / fork := true
+Compile / run / fork         := true
 Compile / run / connectInput := true
+
+assembly / mainClass       := Some("tictactoe.Main")
+assembly / assemblyJarName := "tictactoe.jar"

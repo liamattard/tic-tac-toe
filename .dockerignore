@@ -1,0 +1,7 @@
+*
+!Dockerfile
+!target/
+target/*
+!target/scala-2.13/
+target/scala-2.13/*
+!target/scala-2.13/tictactoe.jar

@@ -41,7 +41,7 @@ class GameSuite extends munit.FunSuite {
   }
 
   test("a winning ninth move takes precedence over a draw") {
-    val before = played(0, 1, 2, 3, 4, 5, 7, 6)
+    val before   = played(0, 1, 2, 3, 4, 5, 7, 6)
     val finished = accepted(before.play(8))
 
     assertEquals(before.status, GameStatus.InProgress)
@@ -50,8 +50,8 @@ class GameSuite extends munit.FunSuite {
   }
 
   test("moves after a win are rejected before checking the square") {
-    val game = played(0, 3, 1, 4, 2)
-    val cellsBefore = game.board.cells
+    val game         = played(0, 3, 1, 4, 2)
+    val cellsBefore  = game.board.cells
     val playerBefore = game.currentPlayer
 
     List(6, 0, -1).foreach { position =>

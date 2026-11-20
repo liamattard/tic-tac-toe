@@ -2,7 +2,7 @@ package tictactoe.service
 
 import scala.annotation.tailrec
 import scala.io.StdIn
-import tictactoe.component.BoardRenderer
+import tictactoe.component.TerminalDisplay
 import tictactoe.config.Logging
 import tictactoe.model.Game
 import tictactoe.model.result.MoveError
@@ -10,8 +10,10 @@ import tictactoe.model.state.GameStatus
 
 final class GameLoopService private (
     readLine: () => String,
-    writeLine: String => Unit
+    writeLine: String => Unit,
+    terminalEffects: Boolean
 ) {
+  private val display = new TerminalDisplay(terminalEffects)
   private val logger  = Logging.logger
   private val goodbye = "Input ended. Goodbye!"
 
@@ -39,13 +41,14 @@ final class GameLoopService private (
   }
 
   @tailrec
-  private def loop(game: Game): Unit = {
-    writeLine(BoardRenderer.render(game.board))
+  private def loop(game: Game, error: Option[String] = None): Unit = {
+    writeLine(display.board(game.board))
+    error.foreach(message => writeLine(display.error(message)))
     game.status match {
 
       case GameStatus.Won(player) =>
         logger.info(s"Game finished: winner=${player.mark}")
-        writeLine(s"${player.name} (${player.mark}) wins!")
+        writeLine(display.success(s"${player.name} (${player.mark}) wins!"))
 
       case GameStatus.Draw =>
         logger.info("Game finished: draw")
@@ -53,8 +56,9 @@ final class GameLoopService private (
 
       case GameStatus.InProgress =>
         readTurn(game) match {
-          case Some(next) => loop(next)
-          case None       => endInput("Game ended: input closed")
+          case Some(Right(next))   => loop(next)
+          case Some(Left(message)) => loop(game, Some(message))
+          case None                => endInput("Game ended: input closed")
         }
     }
   }
@@ -64,7 +68,7 @@ final class GameLoopService private (
     Option(readLine()).map(_.trim).map(name => if (name.isEmpty) s"Player $mark" else name)
   }
 
-  private def readTurn(game: Game): Option[Game] = {
+  private def readTurn(game: Game): Option[Either[String, Game]] = {
     val player = game.currentPlayer
 
     writeLine(s"${player.name} (${player.mark}), choose a square (1–9):")
@@ -74,23 +78,21 @@ final class GameLoopService private (
         case Some(number) => attemptMove(game, number - 1)
         case None =>
           logger.fine("Move rejected: invalid square input")
-          writeLine("Please enter a number from 1 to 9.")
-          game
+          Left("Please enter a number from 1 to 9.")
       }
     }
   }
 
-  private def attemptMove(game: Game, position: Int): Game =
+  private def attemptMove(game: Game, position: Int): Either[String, Game] =
     game.play(position) match {
 
       case Right(updated) =>
         logger.fine(s"Move accepted: mark=${game.currentPlayer.mark}, position=$position")
-        updated
+        Right(updated)
 
       case Left(error) =>
         logger.fine(s"Move rejected: position=$position, reason=$error")
-        writeLine(errorMessage(error))
-        game
+        Left(errorMessage(error))
     }
 
   private def errorMessage(error: MoveError): String = error match {
@@ -111,6 +113,7 @@ object GameLoopService {
   /** Runs one match; tests can provide scripted input and captured output. */
   def run(
       readLine: () => String = () => StdIn.readLine(),
-      writeLine: String => Unit = line => println(line)
-  ): Unit = new GameLoopService(readLine, writeLine).run()
+      writeLine: String => Unit = line => println(line),
+      terminalEffects: Boolean = false
+  ): Unit = new GameLoopService(readLine, writeLine, terminalEffects).run()
 }
