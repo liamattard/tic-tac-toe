@@ -7,7 +7,7 @@ sealed trait GameStatus
 
 /** A match is ongoing, won by a player, or drawn. */
 object GameStatus {
-  case object InProgress extends GameStatus
+  case object InProgress               extends GameStatus
   final case class Won(player: Player) extends GameStatus
-  case object Draw extends GameStatus
+  case object Draw                     extends GameStatus
 }
