@@ -62,4 +62,50 @@ class WebServerSuite extends munit.FunSuite {
       assertEquals(response.headers().firstValue("Allow").orElse(""), "POST")
     }
   }
+
+  test("health endpoint works when explicitly bound for hosting") {
+    val server = WebServer.start(0, host = "0.0.0.0")
+    try {
+      val request = HttpRequest
+        .newBuilder(URI.create(s"http://127.0.0.1:${server.port}/health"))
+        .GET()
+        .build()
+      val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+      assertEquals(response.statusCode(), 200)
+      assertEquals(ujson.read(response.body())("status").str, "ok")
+      assertEquals(post(server, "/health", "{}")._1, 405)
+    } finally server.close()
+  }
+
+  test("capacity evicts the oldest created game, even after it receives a move") {
+    val server = WebServer.start(0, maxGames = 2)
+    try {
+      def create(): String = post(server, "/api/games", "{}")._2("id").str
+      def move(id: String, position: Int): Int =
+        post(server, s"/api/games/$id/moves", s"""{"position":$position}""")._1
+      val oldest = create()
+      val second = create()
+      assertEquals(move(oldest, 0), 200)
+      val newest = create()
+      assertEquals(move(oldest, 1), 404)
+      assertEquals(move(second, 0), 200)
+      assertEquals(move(newest, 0), 200)
+    } finally server.close()
+  }
+
+  test("startup uses hosting variables while keeping local defaults") {
+    assertEquals(
+      WebMain.settings(Array.empty[String], Map.empty[String, String]),
+      (8080, "127.0.0.1")
+    )
+    assertEquals(WebMain.settings(Array.empty[String], Map("PORT" -> "9000")), (9000, "0.0.0.0"))
+    assertEquals(
+      WebMain.settings(Array("8081"), Map("PORT" -> "9000", "HOST" -> "127.0.0.1")),
+      (8081, "127.0.0.1")
+    )
+    intercept[IllegalArgumentException] {
+      WebMain.settings(Array.empty[String], Map("PORT" -> "65536"))
+    }
+  }
+
 }

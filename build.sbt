@@ -25,6 +25,8 @@ lazy val web = project
       "com.lihaoyi"   %% "ujson" % "4.4.3",
       "org.scalameta" %% "munit" % "1.2.1" % Test
     ),
-    Compile / run / fork      := true,
-    Compile / run / mainClass := Some("tictactoe.web.WebMain")
+    Compile / run / fork       := true,
+    Compile / run / mainClass  := Some("tictactoe.web.WebMain"),
+    assembly / mainClass       := Some("tictactoe.web.WebMain"),
+    assembly / assemblyJarName := "tictactoe-web.jar"
   )

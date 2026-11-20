@@ -1,0 +1,19 @@
+FROM eclipse-temurin:17-jdk-jammy AS build
+WORKDIR /build
+
+ADD https://repo.maven.apache.org/maven2/org/scala-sbt/sbt-launch/1.12.15/sbt-launch-1.12.15.jar /opt/sbt-launch.jar
+COPY build.sbt ./
+COPY project/build.properties project/plugins.sbt ./project/
+COPY src ./src/
+COPY web/src ./web/src/
+RUN java -XX:ActiveProcessorCount=2 -Xmx1g -jar /opt/sbt-launch.jar clean test web/test web/assembly
+
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+RUN useradd --create-home --uid 10001 app
+COPY --from=build /build/web/target/scala-2.13/tictactoe-web.jar ./tictactoe-web.jar
+ENV HOST=0.0.0.0
+ENV PORT=8080
+EXPOSE 8080
+USER app
+ENTRYPOINT ["java", "-jar", "/app/tictactoe-web.jar"]

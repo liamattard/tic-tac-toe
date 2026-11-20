@@ -26,6 +26,8 @@ jobs:
           name: coverage-report
           path: target/scala-2.13/scoverage-report/
           if-no-files-found: error
+      - name: Check browser adapter
+        run: sbt web/scalafmtCheckAll web/test
 
   docker:
     runs-on: ubuntu-latest
