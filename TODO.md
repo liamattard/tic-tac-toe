@@ -24,7 +24,8 @@
 ## Nice to Have
 - [ ] Player vs Computer
 - [ ] Web Interface (vue?)
-- [ ] Docker build and run instructions
+- [x] Dockerfile and build/run instructions
+- [x] Verify container build and smoke test locally
 - [x] Export the planning sketch as PNG for easy viewing
 
 

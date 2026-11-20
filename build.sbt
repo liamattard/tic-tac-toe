@@ -8,3 +8,6 @@ libraryDependencies += "org.scalameta" %% "munit" % "1.2.1" % Test
 
 Compile / run / fork         := true
 Compile / run / connectInput := true
+
+assembly / mainClass       := Some("tictactoe.Main")
+assembly / assemblyJarName := "tictactoe.jar"
