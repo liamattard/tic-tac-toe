@@ -4,15 +4,29 @@ import scala.collection.mutable.ListBuffer
 
 /** Exercises complete terminal sessions with scripted input. */
 class GameLoopServiceSuite extends munit.FunSuite {
-  private def session(lines: String*): List[String] = {
-    val input = lines.iterator
+  private def session(lines: String*): List[String] = playSession(false, lines)
+
+  private def playSession(terminalEffects: Boolean, lines: Seq[String]): List[String] = {
+    val input  = lines.iterator
     val output = ListBuffer.empty[String]
 
     GameLoopService.run(
       readLine = () => if (input.hasNext) input.next() else null,
-      writeLine = line => { output += line; () }
+      writeLine = line => { output += line; () },
+      terminalEffects = terminalEffects
     )
     output.toList
+  }
+
+  test("a red error remains after the screen redraw and before the repeated prompt") {
+    val output = playSession(true, Seq("Liam", "Ġwanni", "wrong", "5", "5"))
+    val errors = output.zipWithIndex.filter { case (line, _) => line.startsWith("\u001b[31m") }
+
+    assertEquals(errors.size, 2)
+    errors.foreach { case (_, index) =>
+      assert(output(index - 1).startsWith("\u001b[2J\u001b[H"))
+      assert(output(index + 1).contains("choose a square"))
+    }
   }
 
   test("a complete game displays the final board and named X winner") {

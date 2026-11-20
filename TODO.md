@@ -15,9 +15,11 @@
 - [x] Detect all winning lines and draws; stop after completion
 - [x] Test rules, rejected moves, and a win on the final square
 - [x] Document run/test commands and pin tool versions
-- [ ] Formatting and CI checks
-- [ ] Terminal clearing screen each time
-- [ ] Terminal colours
+- [x] Reproducible formatting checks
+- [x] GitHub CI workflow for formatting and tests
+- [ ] Verify the first hosted CI run after pushing
+- [x] Terminal clearing screen each time
+- [x] Terminal colours
 
 ## Nice to Have
 - [ ] Player vs Computer

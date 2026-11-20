@@ -7,5 +7,5 @@ sealed trait MoveError
 object MoveError {
   case object OutOfBounds    extends MoveError
   case object OccupiedSquare extends MoveError
-  case object GameFinished extends MoveError
+  case object GameFinished   extends MoveError
 }
