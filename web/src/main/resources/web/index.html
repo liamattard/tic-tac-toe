@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf2f9">
+  <title>Tic-tac-toe</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='60' fill='%232257d8'%3EX%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="game-layout">
+    <section class="setup" aria-labelledby="title">
+      <div class="game-symbol" aria-hidden="true"><span>×</span><span>○</span></div>
+      <h1 id="title">Tic.<br>Tac.<br>Toe.</h1>
+      <p class="intro">Two players. Three in a row.</p>
+      <form id="players-form">
+        <label for="x-name"><span class="mark x">X</span> First player</label>
+        <input id="x-name" name="xName" maxlength="60" placeholder="Player X" autocomplete="off">
+        <label for="o-name"><span class="mark o">O</span> Second player</label>
+        <input id="o-name" name="oName" maxlength="60" placeholder="Player O" autocomplete="off">
+        <button class="start" id="start-button" type="submit">Start game</button>
+      </form>
+      <p class="instructions">Play together on this screen. X goes first.</p>
+    </section>
+
+    <section class="play-area" aria-label="Game">
+      <div class="turn-bar">
+        <span class="turn-mark" id="turn-mark" aria-hidden="true">X</span>
+        <div><h2 id="status" aria-live="polite">Who's playing?</h2><p id="hint">Enter your names, then start a game.</p></div>
+      </div>
+      <div class="board" id="board" role="group" aria-label="Tic-tac-toe board"></div>
+      <p class="error" id="error" role="alert"></p>
+      <div class="players" id="players" hidden>
+        <div id="x-player"><span class="mark x">X</span><span id="x-label"></span></div>
+        <div id="o-player"><span class="mark o">O</span><span id="o-label"></span></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
