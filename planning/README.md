@@ -1,27 +1,21 @@
 # Planning
 
-- [Component notes](components.md)
-- [Components and game loop](planning.excalidraw) — open with Excalidraw Editor in VS Code.
+- [Original component notes](planning.md)
+- [Components and game loop](planning.excalidraw) — editable with Excalidraw.
+- [PNG export](planning.png) — view without an extension.
+- [Version 1 release plan](v1.md)
 - [TODO](../TODO.md)
 
-## First slice
+The notes and drawing are early drafts, not exact specifications of the final code.
 
-Start with an empty board and a readable terminal printout.
+## Decisions made for v1
 
-- `Mark`: X or O.
-- `Board`: nine cells stored as `Vector[Option[Mark]]`. `None` means empty.
-- Terminal renderer: show marks or square numbers, in three rows. Keep printing outside the board.
-- `Main`: print the empty board.
+- Fixed 3×3 board stored as `Vector[Option[Mark]]`; terminal squares 1–9 map to indexes 0–8.
+- Named players have fixed X/O assignments; X starts. Private game construction keeps two players and a valid turn index.
+- `Either` represents accepted or rejected moves. Rejections preserve state and turn.
+- Status is derived from the board: win first, then draw, otherwise in progress.
+- Blank names default to Player X/Player O; EOF exits cleanly.
+- Rules, rendering, terminal interaction, and logging have separate responsibilities.
 
-A flat vector makes numbered square selection straightforward and supports immutable updates. Use indexes 0–8 internally and show squares 1–9 to the player.
-
-Next: placing a mark and rejecting an occupied square, then turns and game outcomes.
-
-## Still to decide
-
-- Exact types for move errors and outcomes; a win must identify the winner.
-- Whether status is stored or calculated from the board. `Started` may not need to be separate from `InProgress`.
-- How to guarantee exactly two players with different marks.
-- Defaults for blank player names.
-
-The sketch is a draft. During implementation, keep initialisation separate from redisplaying the board, display the final board, and handle end of input cleanly.
+The first implementation slice was an empty board and a terminal printout. Tests
+then guided placement, winning lines, fullness, turns, outcomes, and the terminal loop.

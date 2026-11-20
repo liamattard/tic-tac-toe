@@ -1,4 +1,6 @@
-# Planning
+# Early planning draft
+
+These notes were written before implementation. See [decisions made for v1](README.md#decisions-made-for-v1) for the resulting design.
 
 
 ## Components
@@ -44,7 +46,6 @@ Read Excalidraw to see game loop
 
 TDD for the game behaviour
 - An empty board contains nine empty cells
-- Placing a mark updated a cell 
+- Placing a mark updated a cell
 - Rejected moves for occupied
 - wins/draws..etc
-

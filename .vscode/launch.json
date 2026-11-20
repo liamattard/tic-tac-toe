@@ -6,6 +6,12 @@
       "type": "scala",
       "request": "launch",
       "mainClass": "tictactoe.Main"
+    },
+    {
+      "name": "Debug Board tests",
+      "type": "scala",
+      "request": "launch",
+      "testClass": "tictactoe.model.GameSuite"
     }
   ]
 }

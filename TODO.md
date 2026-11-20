@@ -5,23 +5,25 @@
 - [x] Game Loop
 
 ## Core game
-- [ ] Standard 3x3 grid
-- [ ] First slice: empty immutable board, marks, terminal renderer, and Main
-- [ ] Place a mark; reject occupied and out-of-range squares
-- [ ] Two player mode (Terminal)
-- [ ] Create the components
-- [ ] Error Handling
-- [ ] Clear terminal messages for input errors and results
-- [ ] Detect all winning lines and draws; stop after completion
-- [ ] Test rules, rejected moves, and a win on the final square
-- [ ] Document run/test commands and pin tool versions
+- [x] Standard 3x3 grid
+- [x] First slice: empty immutable board, marks, terminal renderer, and Main
+- [x] Place a mark; reject occupied and out-of-range squares
+- [x] Two player mode (Terminal)
+- [x] Create the components
+- [x] Error Handling
+- [x] Clear terminal messages for input errors and results
+- [x] Detect all winning lines and draws; stop after completion
+- [x] Test rules, rejected moves, and a win on the final square
+- [x] Document run/test commands and pin tool versions
 - [ ] Formatting and CI checks
+- [ ] Terminal clearing screen each time
+- [ ] Terminal colours
 
 ## Nice to Have
 - [ ] Player vs Computer
 - [ ] Web Interface (vue?)
 - [ ] Docker build and run instructions
-- [ ] Export the planning sketch as PNG for easy viewing
+- [x] Export the planning sketch as PNG for easy viewing
 
 
 ## Bot (future)
