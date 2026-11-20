@@ -1,6 +1,7 @@
 package tictactoe.model
 
 import tictactoe.model.result.MoveError
+import tictactoe.model.state.GameStatus
 
 /** Immutable match state with two players and an index identifying whose turn it is. */
 final class Game private (
@@ -9,14 +10,24 @@ final class Game private (
     private val currentPlayerIndex: Int
 ) {
 
-  /** Returns the participant whose mark will be placed next. */
+  /** Returns the participant whose turn is recorded; completed games accept no moves. */
   def currentPlayer: Player = players(currentPlayerIndex)
 
-  /** Places the current mark at index and changes turns only on success. */
+  /** Derives the outcome from the board, checking for a win before a draw. */
+  def status: GameStatus = board.winner match {
+    case Some(Mark.X)         => GameStatus.Won(players(0))
+    case Some(Mark.O)         => GameStatus.Won(players(1))
+    case None if board.isFull => GameStatus.Draw
+    case None                 => GameStatus.InProgress
+  }
+
+  /** Places the current mark and changes turns on success; rejects completed games. */
   def play(position: Int): Either[MoveError, Game] =
-    board.place(position, currentPlayer.mark).map { updatedBoard =>
-      new Game(updatedBoard, players, 1 - currentPlayerIndex)
-    }
+    if (status != GameStatus.InProgress) Left(MoveError.GameFinished)
+    else
+      board.place(position, currentPlayer.mark).map { updatedBoard =>
+        new Game(updatedBoard, players, 1 - currentPlayerIndex)
+      }
 }
 
 object Game {
