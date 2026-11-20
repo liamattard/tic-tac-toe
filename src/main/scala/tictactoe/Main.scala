@@ -1,12 +1,13 @@
 package tictactoe
 
-import tictactoe.component.BoardRenderer
-import tictactoe.model.Board
+import tictactoe.service.GameLoopService
+import tictactoe.config.Logging
 
 object Main {
 
   def main(args: Array[String]): Unit = {
-    println("Tic Tac Toe :)")
-    println(BoardRenderer.render(Board.empty))
+    Logging.initialise()
+    try GameLoopService.run()
+    finally Logging.close()
   }
 }

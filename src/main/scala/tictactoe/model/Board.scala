@@ -6,12 +6,10 @@ import tictactoe.model.result.MoveError
   */
 final class Board private (val cells: Vector[Option[Mark]]) {
 
+  /** Returns a new board after a valid placement at index 0–8, or a rejection. */
   def place(position: Int, mark: Mark): Either[MoveError, Board] = {
-    // Position out of bounds
     if (position < 0 || position >= cells.size) Left(MoveError.OutOfBounds)
-    // Already taken square
     else if (cells(position).isDefined) Left(MoveError.OccupiedSquare)
-    // Correct
     else Right(new Board(cells.updated(position, Some(mark))))
   }
 
@@ -24,8 +22,7 @@ final class Board private (val cells: Vector[Option[Mark]]) {
       case List(Some(a), Some(b), Some(c)) if a == b && b == c => a
     }
 
-  /** will only be used in the Debug console by me :)
-    */
+  /** Returns a compact board representation for debugging. */
   override def toString: String =
     cells
       .map(_.fold(".")(_.toString))
@@ -49,5 +46,6 @@ object Board {
     List(2, 4, 6) // diagonals
   )
 
+  /** Creates a standard board with nine empty cells. */
   def empty: Board = new Board(Vector.fill(9)(None))
 }

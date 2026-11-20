@@ -11,7 +11,7 @@
       "name": "Debug Board tests",
       "type": "scala",
       "request": "launch",
-      "testClass": "tictactoe.model.BoardSuite"
+      "testClass": "tictactoe.model.GameSuite"
     }
   ]
 }
